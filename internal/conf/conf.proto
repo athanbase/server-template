@@ -1,0 +1,63 @@
+syntax = "proto3";
+package kratos.api;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "server-template/internal/conf;conf";
+
+message Config {
+  string env = 1;
+  Server server = 2;
+  DB db = 3;
+  Redis redis = 4;
+  Log log = 5;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Redis {
+  repeated string addrs = 1;
+  string username = 2;
+  string passwd = 3;
+  string master_name = 4;
+  int32 db = 5;
+  bool is_enable_tls = 6;
+}
+
+message DB {
+  DbConfig master = 1;
+  DbConfig slave = 2;
+}
+
+message DbConfig {
+  string dsn = 1;
+  int32 max_open_conn = 2;
+  int32 max_idle_conn = 3;
+  int32 max_lifetime_conn = 4;
+  string driver = 5;
+}
+
+message Log {
+  string app_name = 1;
+  bool is_write_file = 2;
+  LogFile log_file = 3;
+}
+
+message LogFile {
+  string name = 1;
+  int32 max_size = 2; // MB
+  int32 max_age = 3; // day
+}

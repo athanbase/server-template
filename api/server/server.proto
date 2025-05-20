@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package api.server;
+
+import "buf/validate/validate.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "server-template/api/server;server";
+
+service Server {
+  rpc CreateUser(CreateUserReq) returns (CreateUserReply) {
+    option (google.api.http) = {
+      post: "/v1/user/create"
+      body: "*"
+    };
+    option (gnostic.openapi.v3.operation) = {summary: "create user"};
+  }
+
+  rpc ping(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {get: "/ping"};
+    option (gnostic.openapi.v3.operation) = {summary: "ping"};
+  }
+}
+
+message CreateUserReq {
+  string name = 1;
+  string last_name = 2 [
+    (buf.validate.field).required = true,
+    (buf.validate.field).string.min_len = 2,
+    (buf.validate.field).string.max_len = 30
+  ];
+  string email = 3 [
+    (buf.validate.field).required = true,
+    (buf.validate.field).string.email = true
+  ];
+
+  option (buf.validate.message).cel = {
+    id: "name.not.email"
+    message: "first name and last name cannot be the same as email"
+    expression: "this.name != this.email && this.last_name != this.email"
+  };
+  option (buf.validate.message).cel = {
+    id: "name.length.max"
+    message: "name and last name must be less than 30 characters"
+    expression: "size(this.name + this.last_name) <= 30"
+  };
+}
+
+message CreateUserReply {
+  string id = 1;
+}

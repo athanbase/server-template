@@ -1,0 +1,55 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Server API
+    version: 0.0.1
+paths:
+    /ping:
+        get:
+            tags:
+                - Server
+            summary: ping
+            operationId: Server_Ping
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/user/create:
+        post:
+            tags:
+                - Server
+            summary: create user
+            operationId: Server_CreateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.server.CreateUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.server.CreateUserReply'
+components:
+    schemas:
+        api.server.CreateUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.server.CreateUserReq:
+            type: object
+            properties:
+                name:
+                    type: string
+                lastName:
+                    type: string
+                email:
+                    type: string
+tags:
+    - name: Server

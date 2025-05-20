@@ -1,0 +1,41 @@
+env: dev
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
+
+db:
+  master:
+    driver: mysql
+    dsn: root:root123@tcp(localhost:33306)/dev?charset=utf8&parseTime=True&loc=UTC
+    max_open_conn: 100
+    max_idle_conn: 10
+    max_life_time: 300 # seconds
+  slave:
+    driver: mysql
+    dsn: root:root123@tcp(localhost:33306)/dev?charset=utf8&parseTime=True&loc=UTC
+    max_open_conn: 100
+    max_idle_conn: 10
+    max_life_time: 300 # seconds
+
+redis:
+  addrs:
+    - localhost:6379
+  username: ""
+  password: ""
+  master_name: ""
+  is_enable_tls: false
+  db: 0
+  expire_time: 24 # hour
+
+log:
+  app_name: server-template
+  level: debug
+  is_write_file: false
+  log_file:
+    name: server-template.log
+    max_size: 100 # megabytes
+    max_age: 30 # days

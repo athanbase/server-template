@@ -1,0 +1,24 @@
+version: v2
+clean: false
+plugins:
+  - local: protoc-gen-go
+    # - remote: buf.build/protocolbuffers/go:v1.36.6
+    out: api
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    # - remote: buf.build/grpc/go:v1.5.1
+    out: api
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=true
+  - local: protoc-gen-go-http
+    out: api
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-openapi
+    # - remote: buf.build/community/google-gnostic-openapi:v0.7.0
+    out: .
+    opt:
+      - fq_schema_naming=true
+      - default_response=false

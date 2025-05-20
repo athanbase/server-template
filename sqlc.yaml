@@ -1,0 +1,17 @@
+version: "2"
+sql:
+  - schema: "internal/data/migration"
+    queries: "internal/data/query"
+    engine: "mysql"
+    gen:
+      go:
+        package: "queries"
+        out: "internal/data/queries"
+        emit_json_tags: true
+        emit_prepared_queries: false
+        emit_interface: true
+        emit_exact_table_names: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "decimal"
+            go_type: "github.com/shopspring/decimal.Decimal"

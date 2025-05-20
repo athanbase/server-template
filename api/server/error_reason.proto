@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package api.server;
+
+option go_package = "server-template/api/server;server";
+option java_multiple_files = true;
+option java_package = "api.server";
+
+enum ErrorReason {
+  SUCCESS = 0;
+  USER_NOT_FOUND = 1;
+}

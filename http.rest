@@ -1,0 +1,16 @@
+@local = http://localhost:8000
+@hostname = {{local}}
+@contentType = application/json
+
+### health check
+GET  {{hostname}}/ping
+
+### post example
+POST {{hostname}}/v1/user/create
+Content-Type: {{contentType}}
+
+{
+    "name": "bob",
+    "lastName": "smith",
+    "email":"smith@email"
+}
