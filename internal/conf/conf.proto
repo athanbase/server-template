@@ -26,6 +26,7 @@ message Server {
   }
   HTTP http = 1;
   GRPC grpc = 2;
+  repeated string un_logging_op = 3; // 不需要记录日志的操作
 }
 
 message Redis {

@@ -102,6 +102,7 @@ type Server struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Http          *Server_HTTP           `protobuf:"bytes,1,opt,name=http,proto3" json:"http,omitempty"`
 	Grpc          *Server_GRPC           `protobuf:"bytes,2,opt,name=grpc,proto3" json:"grpc,omitempty"`
+	UnLoggingOp   []string               `protobuf:"bytes,3,rep,name=un_logging_op,json=unLoggingOp,proto3" json:"un_logging_op,omitempty"` // 不需要记录日志的操作
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -146,6 +147,13 @@ func (x *Server) GetHttp() *Server_HTTP {
 func (x *Server) GetGrpc() *Server_GRPC {
 	if x != nil {
 		return x.Grpc
+	}
+	return nil
+}
+
+func (x *Server) GetUnLoggingOp() []string {
+	if x != nil {
+		return x.UnLoggingOp
 	}
 	return nil
 }
@@ -614,10 +622,11 @@ const file_conf_proto_rawDesc = "" +
 	"\x06server\x18\x02 \x01(\v2\x12.kratos.api.ServerR\x06server\x12\x1e\n" +
 	"\x02db\x18\x03 \x01(\v2\x0e.kratos.api.DBR\x02db\x12'\n" +
 	"\x05redis\x18\x04 \x01(\v2\x11.kratos.api.RedisR\x05redis\x12!\n" +
-	"\x03log\x18\x05 \x01(\v2\x0f.kratos.api.LogR\x03log\"\xb8\x02\n" +
+	"\x03log\x18\x05 \x01(\v2\x0f.kratos.api.LogR\x03log\"\xdc\x02\n" +
 	"\x06Server\x12+\n" +
 	"\x04http\x18\x01 \x01(\v2\x17.kratos.api.Server.HTTPR\x04http\x12+\n" +
-	"\x04grpc\x18\x02 \x01(\v2\x17.kratos.api.Server.GRPCR\x04grpc\x1ai\n" +
+	"\x04grpc\x18\x02 \x01(\v2\x17.kratos.api.Server.GRPCR\x04grpc\x12\"\n" +
+	"\run_logging_op\x18\x03 \x03(\tR\vunLoggingOp\x1ai\n" +
 	"\x04HTTP\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +

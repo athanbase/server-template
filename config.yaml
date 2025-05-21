@@ -1,5 +1,7 @@
 env: dev
 server:
+  un_logging_op:
+    - "/api.server.Server/ping"
   http:
     addr: 0.0.0.0:8000
     timeout: 60s

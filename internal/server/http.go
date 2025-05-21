@@ -1,20 +1,37 @@
 package server
 
 import (
+	"context"
+
 	"server-template/api/server"
 	"server-template/internal/conf"
 	"server-template/internal/service"
 	"server-template/pkg/middleware"
 
 	"server-template/pkg/middleware/validate"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/ratelimit"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/gorilla/handlers"
 )
+
+func NewWhiteListMatcher(c *conf.Server) selector.MatchFunc {
+	whiteList := make(map[string]struct{})
+	for _, v := range c.UnLoggingOp {
+		whiteList[v] = struct{}{}
+	}
+	return func(ctx context.Context, operation string) bool {
+		if _, ok := whiteList[operation]; ok {
+			return false
+		}
+		return true
+	}
+}
 
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server, serverSvc *service.ServerService, logger log.Logger) *http.Server {
@@ -24,7 +41,7 @@ func NewHTTPServer(c *conf.Server, serverSvc *service.ServerService, logger log.
 			ratelimit.Server(),
 			metadata.Server(),
 			middleware.RequestIdHandler,
-			logging.Server(logger),
+			selector.Server(logging.Server(logger)).Match(NewWhiteListMatcher(c)).Build(),
 			validate.ProtoValidate(),
 		),
 		http.Filter(handlers.CORS(
