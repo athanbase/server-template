@@ -47,7 +47,7 @@ config:
 .PHONY: api
 # generate api proto
 api: 
-	buf generate
+	buf dep update&&buf generate
 # api:
 # 	protoc --proto_path=./api \
 # 	       --proto_path=./third_party \
