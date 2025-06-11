@@ -7,6 +7,8 @@ sql:
       go:
         package: "queries"
         out: "internal/data/queries"
+        sql_package: "database/sql"
+        sql_driver: "github.com/go-sql-driver/mysql"
         emit_json_tags: true
         emit_prepared_queries: false
         emit_interface: true
